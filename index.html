@@ -1,51 +1,354 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Fast Reduc'</title>
-		<meta charset="utf-8">
-		<link rel="stylesheet" href="css/style.css">
-	</head>
-	<body>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calculateur de câblage électrique</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrapper">
+        <p class="hero__eyebrow">Outil de dimensionnement</p>
+        <h1>Calculateur complet de câblage d'installation électrique</h1>
+        <p class="hero__lead">
+          Déterminez le courant d'emploi, choisissez le calibre de protection,
+          dimensionnez la section des conducteurs et vérifiez toutes les
+          contraintes normatives en quelques clics.
+        </p>
+        <a class="btn" href="#calculator">Commencer le calcul</a>
+      </div>
+    </header>
 
+    <main class="wrapper" id="calculator">
+      <section class="panel">
+        <h2>Paramètres d'entrée</h2>
+        <p class="panel__intro">
+          Complétez les informations ci-dessous pour décrire votre circuit.
+          Les valeurs par défaut permettent de tester l'outil, mais adaptez-les
+          à votre installation pour obtenir un dimensionnement pertinent.
+        </p>
+        <form id="sizing-form" class="form">
+          <fieldset>
+            <legend>Puissance et alimentation</legend>
+            <div class="form__grid">
+              <label class="form__field">
+                <span>Type de circuit</span>
+                <select id="circuit-type" name="circuitType" required>
+                  <option value="monophase">Monophasé</option>
+                  <option value="triphase">Triphasé</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Puissance installée</span>
+                <div class="form__inline">
+                  <input
+                    type="number"
+                    id="power"
+                    name="power"
+                    min="0"
+                    step="0.1"
+                    value="30"
+                    required
+                  />
+                  <select id="power-unit" name="powerUnit">
+                    <option value="kW">kW</option>
+                    <option value="kVA">kVA</option>
+                  </select>
+                </div>
+              </label>
+              <label class="form__field">
+                <span>Tension d'alimentation (V)</span>
+                <input
+                  type="number"
+                  id="voltage"
+                  name="voltage"
+                  min="100"
+                  step="1"
+                  value="400"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Facteur de puissance cos&nbsp;φ</span>
+                <input
+                  type="number"
+                  id="cosphi"
+                  name="cosphi"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value="0.9"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Facteur de simultanéité ks</span>
+                <input
+                  type="number"
+                  id="ks"
+                  name="ks"
+                  min="0"
+                  step="0.01"
+                  value="1"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Facteur d'utilisation ku</span>
+                <input
+                  type="number"
+                  id="ku"
+                  name="ku"
+                  min="0"
+                  step="0.01"
+                  value="1"
+                  required
+                />
+              </label>
+            </div>
+          </fieldset>
 
-		<div class="banner">
-			<div class="container">
-				<h1>The best promotion codes</h1>
-				<h2>Fast reduc' is the way for you to save money anywhere, any time.</h2>
-				<a href="#apply-section" class="btn-blue">Start now</a>
-			</div>
-		</div>
+          <fieldset>
+            <legend>Câble et conditions d'installation</legend>
+            <div class="form__grid">
+              <label class="form__field">
+                <span>Matériau du conducteur</span>
+                <select id="material" name="material" required>
+                  <option value="copper">Cuivre</option>
+                  <option value="aluminium">Aluminium</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Isolant du câble</span>
+                <select id="insulation" name="insulation" required>
+                  <option value="PVC">PVC</option>
+                  <option value="XLPE">PR/XLPE</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Mode de pose</span>
+                <select id="installation" name="installation" required>
+                  <option value="En conduit (B1)">En conduit (B1)</option>
+                  <option value="Sur chemin de câbles (C)">
+                    Sur chemin de câbles (C)
+                  </option>
+                  <option value="Enterré (D)">Enterré (D)</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Longueur aller (m)</span>
+                <input
+                  type="number"
+                  id="length"
+                  name="length"
+                  min="1"
+                  step="1"
+                  value="50"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Limite de chute de tension (%)</span>
+                <input
+                  type="number"
+                  id="voltage-drop-limit"
+                  name="voltageDropLimit"
+                  min="1"
+                  max="10"
+                  step="0.1"
+                  value="5"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Facteur thermique k<sub>temp</sub></span>
+                <input
+                  type="number"
+                  id="k-temp"
+                  name="kTemp"
+                  min="0"
+                  step="0.01"
+                  value="1"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Facteur de groupement k<sub>group</sub></span>
+                <input
+                  type="number"
+                  id="k-group"
+                  name="kGroup"
+                  min="0"
+                  step="0.01"
+                  value="1"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Autres facteurs k<sub>sup</sub></span>
+                <input
+                  type="number"
+                  id="k-other"
+                  name="kOther"
+                  min="0"
+                  step="0.01"
+                  value="1"
+                  required
+                />
+              </label>
+            </div>
+          </fieldset>
 
-		<div class="container">
+          <fieldset>
+            <legend>Protection et court-circuit</legend>
+            <div class="form__grid">
+              <label class="form__field">
+                <span>Courbe du disjoncteur</span>
+                <select id="curve" name="curve" required>
+                  <option value="B">Type B</option>
+                  <option value="C" selected>Type C</option>
+                  <option value="D">Type D</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Calibre In (A)</span>
+                <select id="in" name="in">
+                  <option value="">Auto (recommandé)</option>
+                </select>
+              </label>
+              <label class="form__field">
+                <span>Icc min au récepteur (A)</span>
+                <input
+                  type="number"
+                  id="icc-min"
+                  name="iccMin"
+                  min="0"
+                  step="1"
+                  value="500"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Icc max au disjoncteur (kA)</span>
+                <input
+                  type="number"
+                  id="icc-max"
+                  name="iccMax"
+                  min="0"
+                  step="0.1"
+                  value="10"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Pouvoir de coupure du disjoncteur (kA)</span>
+                <input
+                  type="number"
+                  id="icu"
+                  name="icu"
+                  min="0"
+                  step="0.1"
+                  value="10"
+                  required
+                />
+              </label>
+              <label class="form__field">
+                <span>Énergie I²t du dispositif (A²s)</span>
+                <input
+                  type="number"
+                  id="i2t"
+                  name="i2t"
+                  min="0"
+                  step="1"
+                  value="0"
+                />
+              </label>
+            </div>
+          </fieldset>
 
-			<h2>What type of promotions can I find ?</h2>
+          <div class="form__actions">
+            <button type="submit" class="btn">Lancer le calcul</button>
+            <button type="reset" class="btn btn--ghost">Réinitialiser</button>
+          </div>
+        </form>
+      </section>
 
-			<div class="cards">
+      <section class="panel" aria-live="polite">
+        <h2>Résultats</h2>
+        <div id="results" class="results">
+          <p class="results__placeholder">
+            Remplissez le formulaire et lancez le calcul pour visualiser les
+            vérifications étape par étape.
+          </p>
+        </div>
+      </section>
 
-				<div class="card">
-					<img src="images/ubereats.png" alt="uber eats">
-					<h3>Uber eats</h3>				
-				</div>
+      <section class="panel">
+        <h2>Méthodologie intégrée</h2>
+        <ol class="steps">
+          <li>
+            <h3>Étape&nbsp;1&nbsp;: Courant d'emploi (IB)</h3>
+            <p>
+              Calcul automatique du courant d'emploi en monophasé ou triphasé à
+              partir de la puissance apparente (ou active + cos&nbsp;φ) en tenant
+              compte des facteurs de simultanéité et d'utilisation.
+            </p>
+          </li>
+          <li>
+            <h3>Étape&nbsp;2&nbsp;: Choix du calibre de protection (In)</h3>
+            <p>
+              Sélection du calibre normalisé immédiatement supérieur au courant
+              d'emploi avec possibilité d'ajuster manuellement le disjoncteur.
+            </p>
+          </li>
+          <li>
+            <h3>Étape&nbsp;3&nbsp;: Courant admissible (Iz)</h3>
+            <p>
+              Consultation d'une base de données simplifiée de sections standard
+              en cuivre ou aluminium selon le mode de pose et application des
+              facteurs correctifs pour obtenir Iz'.
+            </p>
+          </li>
+          <li>
+            <h3>Étape&nbsp;4&nbsp;: Protection contre les surcharges</h3>
+            <p>
+              Vérification que le déclenchement thermique (I₂) reste inférieur à
+              1,45 × Iz' conformément aux prescriptions normatives.
+            </p>
+          </li>
+          <li>
+            <h3>Étape&nbsp;5&nbsp;: Chute de tension (ΔU)</h3>
+            <p>
+              Calcul de la chute de tension en pourcentage sur la longueur du
+              circuit en fonction des caractéristiques linéiques du câble.
+            </p>
+          </li>
+          <li>
+            <h3>Étape&nbsp;6&nbsp;: Court-circuit et contrainte thermique</h3>
+            <p>
+              Contrôle du pouvoir de coupure, du seuil magnétique et de la
+              contrainte thermique k²S² ≥ I²t lorsque les données sont
+              disponibles.
+            </p>
+          </li>
+        </ol>
+        <p class="panel__note">
+          Les valeurs proposées reposent sur des hypothèses représentatives des
+          tableaux normatifs courants (NF C 15-100). Adaptez toujours les
+          paramètres à votre contexte et consultez la documentation fabricant
+          pour valider définitivement le choix du matériel.
+        </p>
+      </section>
+    </main>
 
-				<div class="card">
-					<img src="images/nike.png" alt="Nike">
-					<h3>Nike</h3>				
-				</div>
-
-				<div class="card">
-					<img src="images/apple.png" alt="Apple">
-					<h3>Apple</h3>				
-				</div>
-
-			</div>
-			
-		</div>
-
-		<div id="apply-section">
-
-			<div data-tf-widget="Edsa1q5Y" data-tf-opacity="100" data-tf-iframe-props="title=My typeform" data-tf-transitive-search-params data-tf-medium="snippet" style="width:100%;height:500px;"></div><script src="//embed.typeform.com/next/embed.js"></script>
-		</div>
-
-	</body>
-
+    <footer class="footer">
+      <div class="wrapper">
+        <p>
+          &copy; 2024 Calculateur de câblage – Outil pédagogique de pré-dimensionnement.
+        </p>
+      </div>
+    </footer>
+  </body>
 </html>
